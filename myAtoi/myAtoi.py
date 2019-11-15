@@ -10,7 +10,8 @@ class Solution:
         if(s[0] == '-' or s[0] == '+'):
             end = 1
         for i in range(end, len(s)):
-            if(not s[i].isdigit()):
+            print(s[i])
+            if(not s[i].isdigit()):                
                 end = i
                 break
             else:
@@ -18,7 +19,10 @@ class Solution:
         if not s[end].isdigit():
             end -= 1
         res_str = s[0:end+1]
-        res = int(res_str)
+        try:
+            res = int(res_str)
+        except:
+            return 0
         if(res < -2147483648):
             res = -2147483648
         if(res > 2147483647):
@@ -27,4 +31,4 @@ class Solution:
 
 if __name__=='__main__':
     sol: Solution = Solution()
-    print(sol.myAtoi('+1'))
+    print(sol.myAtoi('+-2'))
