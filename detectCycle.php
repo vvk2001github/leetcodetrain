@@ -22,36 +22,37 @@ class Solution {
      * @return ListNode
      */
     function detectCycle($head) {
-        if(is_null($head)) return null;
+        if($head === null) return null;
         $node = $head;
-        if(is_null($node->next)) return null;
+        if($node->next === null) return null;
 
         $nodes = [];
         do {
-            $pos = array_search($node, $nodes);
+            $pos = in_array(spl_object_hash($node), $nodes, true);
             if($pos !== false) {
+                $node->next = null;
                 return $node;
             }
 
-            $nodes[] = $node;
+            $nodes[] = spl_object_hash($node);
             $node = $node->next;
-        } while(!is_null($node->next));
+        } while($node->next !== null);
 
         return null;
     }
 }
 
-// $head = new ListNode(3);
-// $head->next = new ListNode(2);
-
-// $tmp = $head->next;
-
-// $head->next->next = new ListNode(0);
-// $head->next->next->next = new ListNode(-4);
-// $head->next->next->next->next = $tmp;
-$head = new ListNode(1);
+$head = new ListNode(3);
 $head->next = new ListNode(2);
-$head->next->next = $head;
+
+$tmp = $head->next;
+
+$head->next->next = new ListNode(0);
+$head->next->next->next = new ListNode(-4);
+$head->next->next->next->next = $tmp;
+// $head = new ListNode(1);
+// $head->next = new ListNode(2);
+// $head->next->next = $head;
 
 $solution = new Solution();
 
