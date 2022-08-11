@@ -35,6 +35,17 @@ function lenOfLinkedList(ListNode | null $arr): int {
     return $result;
 }
 
+function posLinkedList(ListNode | null $node, ListNode | null $list): int {
+    $i = -1;
+    while($list) {
+        $i++;
+        if($node == $list) break;
+        $list = $list->next;
+    }
+    return $i;
+}
+
+
 $head = [1,2,3,4,5];
 
 $tmp = arrayToLinkedList($head);
