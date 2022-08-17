@@ -11,6 +11,13 @@
 
 class Solution {
 
+    public function isValid(array $freq):bool {
+        for($i = 0; $i <26; $i++){
+            if($freq[$i] != 0) return false;
+        }
+        return true;
+    }
+
     /**
      * @param String $s
      * @param String $p
@@ -22,44 +29,36 @@ class Solution {
         $len_s_p = $len_s - $len_p;
 
         if ($len_s < $len_p) return [];
+        $a = ord('a');
 
-        $p_arr = [];
-        for($i = 0; $i < $len_p; $i++) {
-            if(array_key_exists($p[$i], $p_arr)) {
-                $p_arr[$p[$i]]++;
-            } else {
-                $p_arr[$p[$i]] = 1;
-            }
-        }
-
+        
         $result = [];
-
-        for($i = 0; $i <= $len_s_p; $i++) {
-            $substr = substr($s, $i, $len_p);
-            $tmp = [];
-            for($j =0; $j < $len_p; $j++) {
-                if(!array_key_exists($substr[$j], $p_arr)) break;
-
-                if(array_key_exists($substr[$j], $tmp)) {
-                    $tmp[$substr[$j]]++;
-                } else {
-                    $tmp[$substr[$j]] = 1;
-                }
-
-                if($tmp[$substr[$j]] > $p_arr[$substr[$j]]) break;
-            }
-
-            $diff = array_diff_assoc($p_arr, $tmp);
-            //print_r($diff, false);
-            if($diff === []) $result[] = $i;
+        $freq = array_fill(0, 26, 0);
+        
+        for($i =0; $i < $len_p; $i++) {
+            $freq[ord($p[$i]) - $a]++;
+            $freq[ord($s[$i]) - $a]--;
         }
+
+        if($this->isValid($freq))  $result[] = 0;
+
+        for($i=$len_p; $i<$len_s; $i++) {
+            $index1 = ord($s[$i - $len_p]) - $a;
+            $char1 = $s[$i - $len_p];
+            $freq[$index1]++;
+            $index2 = ord($s[$i]) - $a;
+            $char2 = $s[$i];
+            $freq[$index2]--;
+            if($this->isValid($freq)) $result[] = $i - $len_p + 1;
+        }
+
 
         return $result;
     }
 }
 
-$s = "abab";
-$p = "ab";
+$s = "cbaebabacd";
+$p = "abc";
 
 $solution = new Solution();
 
