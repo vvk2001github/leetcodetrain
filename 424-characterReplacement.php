@@ -16,12 +16,37 @@ class Solution {
      * @return Integer
      */
     function characterReplacement($s, $k) {
-        
+        //if($k == 0) return 1;
+        $left = 0;
+        $right = -1; 
+        $result = 0;
+        $a = ord('A');
+        $len = strlen($s);
+        $freq = array_fill(0, 26, 0);
+
+        $winlen = 1;
+        do {
+            $maxfreq = max($freq);
+            $winlen = $right - $left + 1;
+            if($winlen - $maxfreq <= $k) {
+                $result = max($result, $winlen);
+                $right++;
+                if($right >= $len) break;
+                $freq[ord($s[$right]) - $a]++;
+            } else {
+                $left++;
+                $winlen--;
+                $freq[ord($s[$left-1]) - $a]--;
+                $result = max($result, $winlen);
+            }
+        } while($right < $len && $left < $len);
+
+        return $result;
     }
 }
 
-$s = "ABAB";
-$k = 2;
+$s = "ABAA";
+$k = 0;
 
 $solution = new Solution();
 
