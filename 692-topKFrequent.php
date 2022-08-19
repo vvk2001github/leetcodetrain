@@ -30,14 +30,18 @@ class Solution {
 
         for($i = 0; $i < $k; $i++) {
             $max = max($freq);
-            $key  = array_search($max, $freq);
+            $keys  = array_keys($freq, $max);
+            sort($keys);
 
-            $result[$key] = $freq[$key];
+            $key = $keys[0];
+
+            //$result[$key] = $freq[$key];
+            $result[] = $key;
 
             unset($freq[$key]);
         };
 
-        $result = array_keys($result);
+        //$result = array_keys($result);
 
         return $result;
     }
