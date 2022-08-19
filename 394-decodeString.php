@@ -18,7 +18,6 @@
 
 class Solution {
 
-
     private $numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
 
@@ -47,10 +46,17 @@ class Solution {
         $count = 0;
         $i = 0;
         do {
-            if($str[$i] == '[') $count++;
-            if($str[$i] == ']') $count--;
+            if($str[$i] == '[') {
+                $count++;
+                // $this->i++;
+            }
+            if($str[$i] == ']') {
+                $count--;
+                //$this->i -= 2;
+            }
             $i++;
         } while($count <> 0);
+        $this->i = $i;
         return $this->helper(substr($str, 1, $i - 2));
     }
 
@@ -91,17 +97,19 @@ class Solution {
      */
     function decodeString($s) {
         $result = '';
+        $len = strlen($s);
 
-        $this->s = $s;
-        $this->len = strlen($s);
-
-        $result = $this->helper($s);
+        
+            $result = $result . $this->helper($s);
+        
 
         return $result;
     }
 }
 
 $s = "3[a2[c]]";
+//$s = "3[a]2[bc]";
+//$s = "2[abc]3[cd]ef";
 
 $solution = new Solution();
 
