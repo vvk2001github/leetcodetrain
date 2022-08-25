@@ -40,6 +40,7 @@ class Solution {
                 }
 
                 $stuck = true;
+                
                 break;
             }
 
