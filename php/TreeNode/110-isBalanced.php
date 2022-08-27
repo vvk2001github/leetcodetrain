@@ -28,8 +28,8 @@ class Solution {
 
         if(is_null($node)) return 0;
 
-        $left_h = 0;
-        $right_h = 0;
+        $left_h = 1;
+        $right_h = 1;
         if(!is_null($node->left)) $left_h = $this->hightTreeNode($node->left) + 1;
         if(!is_null($node->right)) $right_h = $this->hightTreeNode($node->right) + 1;
 
@@ -37,6 +37,8 @@ class Solution {
     }
 
     private function doit($node) {
+
+        if(is_null($node)) return;
 
         if(!$this->result) return;
 
@@ -48,8 +50,8 @@ class Solution {
             return;
         }
 
-        if(!is_null($node->left)) $this->doit($node->left);
-        if(!is_null($node->right)) $this->doit($node->right);
+        $this->doit($node->left);
+        $this->doit($node->right);
     }
 
     /**
@@ -62,6 +64,7 @@ class Solution {
         $this->doit($root);
 
         return $this->result;
+        // return $this->hightTreeNode($root);
     }
 }
 
