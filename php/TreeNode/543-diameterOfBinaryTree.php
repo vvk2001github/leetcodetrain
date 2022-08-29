@@ -23,16 +23,43 @@ class TreeNode {
 
 class Solution {
 
+
+    private int $dia = 0;
+
+    private function diameter(TreeNode | null $node): int {
+        if(is_null($node)) return 0;
+
+        $left_d = $this->diameter($node->left);
+        $right_d = $this->diameter($node->right);
+
+        $this->dia = max($left_d + $right_d, $this->dia);
+
+        return max($left_d, $right_d) + 1;
+    }
+
     /**
      * @param TreeNode $root
      * @return Integer
      */
     function diameterOfBinaryTree($root) {
-        
+        $this->dia = 0;
+        $this->diameter($root);
+        return $this->dia;
     }
 }
 
+$node1 = new TreeNode(1);
+$node2 = new TreeNode(2);
+$node3 = new TreeNode(3);
+$node4 = new TreeNode(4);
+$node5 = new TreeNode(5);
+
+$node1->left = $node2;
+$node1->right = $node3;
+
+$node2->left = $node4;
+$node2->right = $node5;
 
 $solution = new Solution();
 
-print_r($solution->isBalanced( $node3 ), false);
+print_r($solution->diameterOfBinaryTree( $node1 ), false);
