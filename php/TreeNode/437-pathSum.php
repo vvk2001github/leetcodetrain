@@ -22,13 +22,43 @@ class TreeNode {
 
 class Solution {
 
+    private int $count = 0;
+    private int $targetSum = 0;
+
+    private function traverseTree(TreeNode | null $currNode, int $summ) {
+        if(is_null($currNode)) return;
+
+        $summ += $currNode->val;
+        if ($summ == $this->targetSum) $this->count++;
+
+        $this->traverseTree($currNode->left, $summ);
+        $this->traverseTree($currNode->right, $summ);
+    }
+
     /**
      * @param TreeNode $root
-     * @param Integer $targetSum
-     * @return Integer
+     * @param int $targetSum
+     * @return int
      */
     function pathSum($root, $targetSum) {
-        
+        $this->count = 0;
+        $this->targetSum = $targetSum;
+
+        $stack = [];
+        $stack[] = $root;
+
+        while(count($stack) > 0) {
+            $top = array_pop($stack);
+
+            if(!is_null($top)) {
+                array_push($stack, $top->left);
+                array_push($stack, $top->right);
+            }
+
+            $this->traverseTree($top, 0);
+        }
+
+        return $this->count;
     }
 }
 
