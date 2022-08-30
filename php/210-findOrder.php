@@ -56,7 +56,7 @@ class Solution {
     }
 
     /**
-     * @param Integer $numCourses
+     * @param int $numCourses
      * @param Integer[][] $prerequisites
      * @return Integer[]
      */
