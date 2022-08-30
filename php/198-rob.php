@@ -23,7 +23,6 @@ class Solution {
         $count = count($nums);
 
         for($i = 0; $i < $count; $i++) {
-            $t = $nums[$i];
             $temp = max($result1 + $nums[$i], $result2);
 
             $result1 = $result2;
@@ -34,8 +33,8 @@ class Solution {
 }
 
 // $nums = [1,2,3,1];
-$nums = [2,7,9,3,1];
-// $nums = [2,1,1,2];
+// $nums = [2,7,9,3,1];
+$nums = [2,1,1,2];
 
 $solution = new Solution();
 
