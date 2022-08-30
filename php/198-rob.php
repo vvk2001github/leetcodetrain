@@ -14,15 +14,28 @@
 class Solution {
 
     /**
-     * @param Integer[] $nums
-     * @return Integer
+     * @param int[] $nums
+     * @return int
      */
     function rob($nums) {
-        
+        $result1 = 0;
+        $result2 = 0;
+        $count = count($nums);
+
+        for($i = 0; $i < $count; $i++) {
+            $t = $nums[$i];
+            $temp = max($result1 + $nums[$i], $result2);
+
+            $result1 = $result2;
+            $result2 = $temp;
+        }
+        return $temp;
     }
 }
 
-$nums = [1,2,3,1];
+// $nums = [1,2,3,1];
+$nums = [2,7,9,3,1];
+// $nums = [2,1,1,2];
 
 $solution = new Solution();
 
