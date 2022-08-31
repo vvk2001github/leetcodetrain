@@ -12,58 +12,37 @@
 
 class Solution {
 
-    private int $result = PHP_INT_MAX;
-
-    private array $coins = [];
-
-    private array $cache = [];
-
-    private int $countCoins = 0;
-
-    private function doit(int $amount, int $level = 0): void {
-
-        if($level >= $this->result) return;
-
-        if(isset($this->cache[$amount])) return;
-
-        for($i = 0; $i < $this->countCoins; $i++) {
-
-            $tmp = $amount - $this->coins[$i];
-
-            if($tmp > 0) {
-                $this->doit($tmp, $level + 1);
-            }
-
-            if($tmp == 0) {
-                $this->result = min($this->result, $level + 1);
-            }
-
-            if($tmp < 0 ) {
-                $this->cache[$tmp] = -1;
-            }
-        }
-    }
-
     /**
      * @param int[] $coins
      * @param int $amount
      * @return int
      */
     function coinChange($coins, $amount) {
-        $this->countCoins = count($coins);
+        $dp = array_fill(0, $amount + 1, PHP_INT_MAX);
+        $dp[0] = 0;
 
-        rsort($coins);
-        $this->coins = $coins;
-        
-        $this->doit($amount);
+        for($a = 1; $a <= $amount; $a++) {
+            for($c = 0; $c < count($coins); $c++) {
+                $tmp_c = $coins[$c]; 
+                if($a - $coins[$c] >= 0) {
+                    $tmp_dp_a = $dp[$a];
+                    $tmp_dp_a_c = $dp[$a - $tmp_c];
+                    $dp[$a] = min($dp[$a], 1 + $dp[$a - $coins[$c]]);
+                }
+            }
+        }
 
-        return $this->result;
+        if($dp[$amount] != PHP_INT_MAX) {
+            return $dp[$amount];
+        } else {
+            return -1;
+        }
     }
 }
 
-// $coins = [1,2,5]; $amount = 11;
+$coins = [1,2,5]; $amount = 11;
 // $coins = [2]; $amount = 3;
-$coins = [186,419,83,408]; $amount = 6249;
+// $coins = [186,419,83,408]; $amount = 6249;
 // $coins = [1, 3 ,4, 5]; $amount = 7;
 
 $solution = new Solution();
