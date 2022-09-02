@@ -33,18 +33,18 @@ class Solution {
             }
         }
 
-        $to_visit = []; //queue
+        $to_visit = new SplQueue(); //queue
         $buses = [];
 
         foreach($bus_stops[$source] as $bus) {
             foreach($routes[$bus] as $route) {
-                $to_visit[] = [$route, 1];
+                $to_visit->enqueue([$route, 1]);
             }
             $buses[$bus] = true;
         }
 
-        while(!empty($to_visit)) {
-            $tmp = array_shift($to_visit);
+        while(!$to_visit->isEmpty()) {
+            $tmp = $to_visit->dequeue();
             $route = $tmp[0];
             $amount = $tmp[1];
 
@@ -54,7 +54,7 @@ class Solution {
                 if(!isset($buses[$bus])){
                     $buses[$bus] = true;
                     foreach($routes[$bus] as $x) {
-                        $to_visit[] = [$x, $amount + 1];
+                        $to_visit->enqueue([$x, $amount + 1]);
                     }
                 }
             }
@@ -64,8 +64,9 @@ class Solution {
     }
 }
 
-$routes = [[1,2,7],[3,6,7]]; $source = 1; $target = 6;
+// $routes = [[1,2,7],[3,6,7]]; $source = 1; $target = 6;
 // $routes =[[0, 1, 2], [0, 3, 4], [2, 5, 6], [4, 7, 6]]; $source = 0; $target = 7;
+$routes = [[7,12],[4,5,15],[6],[15,19],[9,12,13]]; $source = 15; $target = 12;
 
 $solution = new Solution();
 
