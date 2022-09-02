@@ -27,54 +27,55 @@ class Solution {
 
         $len_s = strlen($s);
         $len_t = strlen($t);
+        $need = 0;
+        $result = '';
+        $result_len = PHP_INT_MAX;
 
         if($len_s < $len_t) return '';
 
-        $hash = [];
+        $hash = []; $window = [];
         for($i = 0; $i < $len_t; $i++) {
             if(isset($hash[$t[$i]])) {
                 $hash[$t[$i]]++;
+                $need++;
             } else {
                 $hash[$t[$i]] = 1;
+                $need++;
+                $window[$t[$i]] = 0;
             }
         }
 
+        $have = 0;
         $left = 0;
-        $right = 0;
-        $found = [];
-        $need = $hash;
-        //
-        $i = 0;
-        while(!isset($hash[$s[$i]])) {
-            $i++;
+
+        while(!isset($hash[$s[$left]])) {
+            $left++;
             if($i >= $len_s) return '';
         };
 
-        $left = $i;
-        $right = $left + 1;
-        $need[$s[$left]]--;
-        if($need[$s[$left]] <= 0) unset($need[$s[$left]]);
-
-        while($left < $len_s) {
-            $right = $left + 1;
-            $countNeed = count($need);
-            while($countNeed > 0 && $right < $len_s) {
-                if(isset($need[$s[$right]])) {
-                    $need[$s[$right]]--;
-                    if($need[$s[$right]] == 0) {
-                        unset($need[$s[$right]]);
-                        $countNeed = count($need);
-                    }
-                }
-                
+        $window[$s[$left]]++;
+        $have = 1;
+        $right = $left;
+        while($left < $len_s && $right < $len_s) {
+            while($have < $need) {
                 $right++;
+
+                if( isset($hash[$s[$right]]) ) {
+                    $window[$s[$right]]++;
+                    if($window[$s[$right]] == $hash[$s[$right]]) $have += 1;
+                }
             }
 
-            if($countNeed <= 0) {
-                $found[] = substr($s, $left, $right - $left);
-            };
+            if($have == $need) {
+                $newLen = $right - $left + 1;
+                if($newLen < $result_len) {
+                    $result = substr($s, $left, $newLen);
+                    $result_len = $newLen;
+                }
+            }
 
-            $need = $hash;
+            $window[$s[$left]]--;
+            $have--;
             $left++;
             if($left >= $len_s) break;
             while(!isset($hash[$s[$left]])) {
@@ -82,27 +83,16 @@ class Solution {
                 if($left >= $len_s) break;
             }
             if($left >= $len_s) break;
-            $need[$s[$left]]--;
-            if($need[$s[$left]] <= 0) unset($need[$s[$left]]);
-
+            $window[$s[$left]]++;
+            $have++;
+            
         }
-
-        $min_index = -1;
-        $min = PHP_INT_MAX;
-        foreach($found as $key => $value) {
-            if(strlen($found[$key]) < $min) {
-                $min = strlen($found[$key]);
-                $min_index = $key;
-            }
-        }
-
-        if(!isset($found[$min_index])) return "";
-        return $found[$min_index];
+        return $result;
     }
 }
 
-// $s = "ADOBECODEBANC"; $t = "ABC";
-$s = "ab"; $t = "a";
+$s = "ADOBECODEBANC"; $t = "ABC";
+// $s = "ab"; $t = "a";
 
 $solution = new Solution();
 
