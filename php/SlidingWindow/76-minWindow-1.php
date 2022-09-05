@@ -1,10 +1,11 @@
 <?php
 
-// !!!!!
-// 265 / 266 test cases passed.
-//
 
 // 76. Minimum Window Substring
+
+// !!!!!!!! Does not work!!!!
+// !!!!!!!! Does not work!!!!
+// !!!!!!!! Does not work!!!!
 
 // Given two strings s and t of lengths m and n respectively, 
 // return the minimum window substring of s such that every character in t (including duplicates) is included in the window. 
@@ -59,7 +60,7 @@ class Solution {
         while($left < $len_s && $right < $len_s) {
             while($have < $need) {
                 $right++;
-
+                if($left >= $len_s || $right >= $len_s) break;
                 if( isset($hash[$s[$right]]) ) {
                     $window[$s[$right]]++;
                     if($window[$s[$right]] == $hash[$s[$right]]) $have += 1;
@@ -74,10 +75,15 @@ class Solution {
                 }
             }
 
+            if($left >= $len_s || $right >= $len_s) break;
             $window[$s[$left]]--;
+            $window[$s[$right]]--;
             $have--;
+            $have--;
+
             $left++;
-            if($left >= $len_s) break;
+            
+            if($left >= $len_s || $right >= $len_s) break;
             while(!isset($hash[$s[$left]])) {
                 $left++;
                 if($left >= $len_s) break;
