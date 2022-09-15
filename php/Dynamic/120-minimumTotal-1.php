@@ -15,28 +15,25 @@
 
 class Solution {
 
-    private array $triangle;
-    private int $levelsCount;
-
-    private function foo(int $level, int $index): int {
-        if($level == $this->levelsCount - 1) return $this->triangle[$level][$index];
-
-        return $this->triangle[$level][$index] + min($this->foo($level + 1, $index), $this->foo($level + 1, $index + 1));
-    }
-
     /**
-     * @param Integer[][] $triangle
+     * @param int[][] $triangle
      * @return Integer
      */
     function minimumTotal($triangle) {
-        $this->triangle = $triangle;
-        $this->levelsCount = count($triangle);
+        $height = count($triangle);
+        if($height == 1) return $triangle[0][0];
 
-        return $this->foo(0, 0);
+        for($level = $height - 2; $level >=0; $level--) {
+            for($position = 0; $position <= $level; $position++) {
+                $triangle[$level][$position] += min($triangle[$level + 1][$position], $triangle[$level + 1][$position + 1]);
+            }
+        }
+
+        return $triangle[0][0];
     }
 }
-// $triangle = [[2],[3,4],[6,5,7],[4,1,8,3]];
-$triangle = [[-10]];
+$triangle = [[2],[3,4],[6,5,7],[4,1,8,3]];
+// $triangle = [[-10]];
 
 $solution = new Solution();
 
