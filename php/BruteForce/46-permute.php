@@ -55,9 +55,10 @@ class Solution {
     }
 }
 
-$nums = [1,2,3];
+// $nums = [1,2,3];
 // $nums = [0,1];
 // $nums = [1];
+$nums = [0, 2, 4];
 
 $solution = new Solution();
 
