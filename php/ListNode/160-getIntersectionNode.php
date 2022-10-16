@@ -50,21 +50,17 @@ class ListNode {
 
 class Solution {
 
-    private function reverseLinkedList(ListNode $head): ListNode {
-        if(!$head) return null;
-
-        $res = new ListNode($head->val);
-        $head = $head->next;
-
-        while($head) {
-            $tmp = new ListNode($head->val);
-            $tmp->next = $res;
-            $res = $tmp;
-            $head = $head->next;
+    private function lenOfLinkedList(ListNode | null $arr): int {
+        $result = 0;
+    
+        while($arr) {
+            $arr = $arr->next;
+            $result++;
         }
-
-        return $res;
+    
+        return $result;
     }
+    
 
     /**
      * @param ListNode $headA
@@ -72,12 +68,46 @@ class Solution {
      * @return ListNode
      */
     function getIntersectionNode($headA, $headB) {
-        return $this->reverseLinkedList($headB);
+        $lenA = $this->lenOfLinkedList($headA);
+        $lenB = $this->lenOfLinkedList($headB);
+
+        $result = null;
+
+        if($lenA > $lenB) [$headA, $headB] = [$headB, $headA];
+
+        for($i =0; $i < abs($lenA - $lenB); $i++) $headB = $headB->next;
+
+        while($headA && $headB) {
+            if($headA === $headB) {
+                $result = $headA;
+                break;
+            }
+
+            $headA = $headA->next;
+            $headB = $headB->next;
+        }
+
+        return $result;
     }
 }
 
-$listA = [4,1,8,4,5]; $listB = [5,6,1,8,4,5];
+// $listA = [4,1,8,4,5]; $listB = [5,6,1,8,4,5];
+
+$listC = new ListNode(8);
+$listC->next = new ListNode(4);
+$listC->next->next = new ListNode(5);
+
+$listA = new ListNode(4);
+$listA->next = new ListNode(1);
+$listA->next->next = $listC;
+
+$listB = new ListNode(5);
+$listB->next = new ListNode(6);
+$listB->next->next = new ListNode(1);
+$listB->next->next->next = $listC;
+
+// print_r( $listB, false);
 
 $solution = new Solution();
 
-print_r( $solution->getIntersectionNode(arrayToLinkedList($listA), arrayToLinkedList($listB)), false);
+print_r( $solution->getIntersectionNode($listA, $listB), false);

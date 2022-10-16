@@ -61,17 +61,16 @@ function posLinkedList(ListNode | null $node, ListNode | null $list): int {
 function reverseLinkedList(ListNode $head): ListNode {
     if(!$head) return null;
 
-    $res = new ListNode($head->val);
-    $head = $head->next;
-
-    while($head) {
-        $tmp = new ListNode($head->val);
-        $tmp->next = $res;
-        $res = $tmp;
-        $head = $head->next;
-    }
-
-    return $res;
+        $prev = null;
+        $current = $head;
+        while($current) {
+            $next = $current->next;
+            $current->next = $prev;
+            $prev = $current;
+            $current = $next;
+        }
+        $head = $prev;
+        return $head;
 }
 
 

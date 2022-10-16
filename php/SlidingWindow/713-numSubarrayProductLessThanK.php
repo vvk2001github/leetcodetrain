@@ -1,5 +1,7 @@
 <?php
 
+// !!! BAD BAD BAD
+
 // 713. Subarray Product Less Than K
 
 // Given an array of integers nums and an integer k, 
@@ -14,41 +16,50 @@ class Solution {
      * @return Integer
      */
     function numSubarrayProductLessThanK($nums, $k) {
-        $count = count($nums);
+
+        if($k <= 1) return 0;
         
-        if($count == 1) {
-            if($nums[0] < $k) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
+        $count = count($nums);
 
-        $left = 0;
-        $right = 0;
-        $product = $nums[0];
+        $left = 0; 
         $result = 0;
+        $product = 1;
 
-        while($left < $count || $right < $count) {
-            // if($product < $k) $result++;
-            while($product < $k && $right < $nums) {
-                $result++;
-                $right++;
-                $product *= $nums[$right];
-            }
 
-            while($product >= $k || $left < $right) {
-                $product = $product / $nums[$left];
+
+        for ($right = 0; $right < $count; $right++) {
+            $product *= $nums[$right];
+
+            while ($product >= $k) {
+                $product /= $nums[$left];
                 $left++;
-                if($product < $k) $result++;
+                if($left >= $count) break;
             }
+            $result += $right - $left + 1;
         }
 
         return $result;
+
+
+        // if ($k <= 1) {
+        //     return 0;
+        // }
+        // $l = $count = 0;
+        // $prod = 1;
+        // foreach ($nums as $r => $num) {
+        //     $prod *= $num;
+        //     while ($prod >= $k) {
+        //         $prod /= $nums[$l++];
+        //     }
+        //     $count += $r - $l + 1;
+        // }
+
+        // return $count;
     }
 }
 
 $nums = [10,5,2,6]; $k = 100;
+// $nums = [1,2,3]; $k = 0;
 
 $solution = new Solution();
 
