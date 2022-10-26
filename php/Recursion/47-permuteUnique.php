@@ -41,14 +41,26 @@ class Solution {
     function permute($nums) {
         $this->countNums = count($nums);
 
-        if($this->countNums == 1) return [$nums];
-        if($this->countNums == 2) return [ [$nums[0], $nums[1]], [$nums[1], $nums[0]] ];
+        if($this->countNums == 1) {
+            return [$nums];
+        }
+
+        if($this->countNums == 2) {
+            $result = [];
+            $result[] = [$nums[0], $nums[1]];
+            if(!in_array([$nums[1], $nums[0]], $result)) $result[] = [$nums[1], $nums[0]];
+            return $result;
+        }
 
         sort($nums);
 
         $result = [];
         $result = [$nums];
-        while ($this->nextSet($nums)) $result[] = $nums;
+        while ($this->nextSet($nums)) {
+            if(!in_array($nums, $result)) {
+                $result[] = $nums;
+            }
+        }
 
         return $result;
 
@@ -58,7 +70,7 @@ class Solution {
 // $nums = [1,2,3];
 // $nums = [0,1];
 // $nums = [1];
-$nums = [1, 1, 2];
+$nums = [1, 1];
 
 $solution = new Solution();
 
