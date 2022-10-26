@@ -11,8 +11,23 @@
 
 class Solution {
 
-    private function dfs(): void {
-        //
+    private int $count_graph;
+    private array $graph;
+    private array $result;
+
+    private function dfs(int $curNode = 0, array $curPath = []): void {
+        
+        $curPath[] = $curNode;
+
+        if($curNode == $this->count_graph - 1) {
+            $this->result[] = $curPath;
+            return;
+        }
+        
+        $countPathsFromCurNode = count($this->graph[$curNode]);
+        for($i = 0; $i < $countPathsFromCurNode; $i++) {
+            $this->dfs($this->graph[$curNode][$i], $curPath);
+        }
     }
 
     /**
@@ -20,12 +35,18 @@ class Solution {
      * @return Integer[][]
      */
     function allPathsSourceTarget($graph) {
-        $count_graph = count($graph);
+        $this->count_graph = count($graph);
+        $this->graph = $graph;
+        $this->result = [];
+        $this->dfs();
+
+        return $this->result;
     }
 }
 
-$graph = [[1,2],[3],[3],[]];
+// $graph = [[1,2],[3],[3],[]];
+$graph = [[4,3,1],[3,2,4],[3],[4],[]];
 
 $solution = new Solution();
 
-print_r($solution->solve( $board ), false);
+print_r($solution->allPathsSourceTarget( $graph ), false);
