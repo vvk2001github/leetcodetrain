@@ -17,15 +17,30 @@
 class Solution {
 
     /**
-     * @param Integer[] $nums
+     * @param int[] $nums
      * @return Integer
      */
     function jump($nums) {
         $countNums = count($nums);
 
-        for($i = 0; $i < $countNums; $i++) {
-            
+        if($countNums == 1) return 0;
+
+        $res = 0;
+        $left = 0; 
+        $right = 0;
+
+        while ($right < $countNums - 1) {
+            $farthest = 0;
+            for($i = $left; $i < ($right + 1); $i++) {
+                $farthest = max($farthest, $i + $nums[$i]);
+            }
+
+            $left = $right + 1;
+            $right = $farthest;
+            $res++;
         }
+
+        return $res;
     }
 }
 
@@ -33,4 +48,4 @@ $nums = [2,3,1,1,4];
 
 $solution = new Solution();
 
-print_r($solution->rob( $nums ), false);
+print_r($solution->jump( $nums ), false);
