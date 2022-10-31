@@ -25,11 +25,26 @@ class Solution {
 
     private array $dp;
     private int $len;
+    private string $s;
 
-    private function dfs(int $i): int {
+    private function dfs(int $i = 0): int {
         if(array_key_exists($i, $this->dp)) {
             return $this->dp[$i];
         }
+
+        if($this->s[$i] == '0') {
+            return 0;
+        }
+
+        $res = $this->dfs($i + 1);
+
+        if($i + 1 < $this->len && ($this->s[$i] == '1' || $this->s[$i] == '2' && $this->s[$i + 1] >= '0' && $this->s[$i + 1] <= '6')){
+            $res += $this->dfs($i + 2);
+        }
+
+        $this->dp[$i] = $res;
+
+        return $res;
     }
 
     /**
@@ -37,8 +52,11 @@ class Solution {
      * @return Integer
      */
     function numDecodings($s) {
+        $this->s = $s;
         $this->len = strlen($s);
         $this->dp[$this->len] = 1;
+
+        return $this->dfs();
     }
 }
 
