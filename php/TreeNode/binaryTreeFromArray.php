@@ -28,7 +28,45 @@ function treeFromArray(array &$arr = [], int $pos = 0): ?TreeNode {
     return $root;
 }
 
-// $arr = [5,4,8,11,null,13,4,7,2,null,null, null, null,5,1];
-$arr = [1, 2, 3];
+function treeFromArray2(array &$arr): ?TreeNode {
 
-print_r(treeFromArray( $arr ), false);
+    $queue = new SplQueue();
+    $pos = 0;
+    $next = $arr[$pos++];
+    $queue->enqueue(new TreeNode($next));
+    $root = null;
+
+    while(!$queue->isEmpty()) {
+        $tree = $queue->dequeue();
+
+        if(is_null($root)) {
+            $root = $tree;
+        }
+
+        $next = $arr[$pos++] ?? null;
+
+        if($next !== null){
+            $tree->left = new TreeNode($next);
+            $queue->enqueue($tree->left);
+        } else {
+            $tree->left = null;
+        }
+        
+        $next = $arr[$pos++] ?? null;
+        
+        if($next !== null){
+            $tree->right = new TreeNode($next);
+            $queue->enqueue($tree->right);
+        } else {
+            $tree->right = null;
+        }
+    }
+
+    return $root;
+}
+
+
+$arr = [5,4,8,11,null,13,4,7,2, null, null,5,1];
+// $arr = [1, 2, 3];
+
+print_r(treeFromArray2( $arr ), false);
