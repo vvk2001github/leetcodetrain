@@ -63,91 +63,58 @@ function treeFromArray2(array &$arr): ?TreeNode {
 
 class Solution {
 
-    private int $key;
+    private function minValue(?TreeNode $root): int {
+        $minv = $root->val;
+        while ($root->left !== null) {
+            $minv = $root->left->val;
+            $root = $root->left;
+        }
 
-    private function doit(?TreeNode $root = null, ?TreeNode $parent = null): void {
+        return $minv;
+    }
+
+    private function deleteRec(?TreeNode $root, int $key): ?TreeNode {
         if($root === null) {
-            return;
+            return $root;
         }
 
-        if($this->key > $root->val) {
-            $this->doit($root->right, $root);
-        } elseif ($this->key < $root->val) {
-            $this->doit($root->left, $root);
+        if($key < $root->val) {
+            $root->left = $this->deleteRec($root->left, $key);
+        } elseif($key > $root->val) {
+            $root->right = $this->deleteRec($root->right, $key);
         } else {
+            // if key is same as root's  val
 
-            // Option 1
-            if($root->left === null && $root->right === null) {
-                if($parent->left === $root) {
-                    $parent->left = null;
-                }
-
-                if($parent->right === $root) {
-                    $parent->right = null;
-                }
-
-                return;
+            // node with only one child or no child
+            if($root->left === null) {
+                return $root->right;
+            } elseif($root->right === null ) {
+                return $root->left;
             }
-            // 1
 
-
-            // Option 2
-            if($root->left === null || $root->right === null) {
-                if($parent->left === $root) {
-                    if($root->left === null) {
-                        $parent->left = $root->right;
-                        return;
-                    }
-
-                    if($root->right === null) {
-                        $parent->left = $root->left;
-                        return;
-                    }
-                }
-
-                if($parent->right === $root) {
-                    if($root->left === null) {
-                        $parent->right = $root->right;
-                        return;
-                    }
-
-                    if($root->right === null) {
-                        $parent->left = $root->left;
-                        return;
-                    }
-                }
-
-                return;
-            }
-            // 2
-
-
-            // Option 3
-            if($root->left !== null && $root->right !== null) {
-                //
-            }
-            // 3
+            // node with two children: Get the inorder
+            // successor (smallest in the right subtree)
+            $root->val = $this->minValue($root->right);
+            $root->right = $this->deleteRec($root->right, $root->val);
         }
-    } 
+
+        return $root;
+    }
 
     /**
      * @param TreeNode $root
-     * @param Integer $key
+     * @param int $key
      * @return TreeNode
      */
     function deleteNode($root, $key) {
-        $result = $root;
-        $this->key = $key;
-
-        $this->doit($root);
-
-        return $result;
+        return $this->deleteRec($root, $key);
     }
 }
 
 
 
-$arr = [5,3,6,2,4,null,7]; $key = 6;
+$arr = [5,3,6,2,4,null,7]; $key = 3;
+// $arr = [5,3,6,2,4,null,7,null, null, 9, 10]; $key = 3;
 
 $root = treeFromArray2($arr);
 
