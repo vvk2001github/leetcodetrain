@@ -1,0 +1,85 @@
+<?php
+
+// 80. Remove Duplicates from Sorted Array II
+
+// Given an integer array nums sorted in non-decreasing order, 
+// remove some duplicates in-place such that each unique element appears at most twice. 
+// The relative order of the elements should be kept the same.
+
+// Since it is impossible to change the length of the array in some languages, 
+// you must instead have the result be placed in the first part of the array nums. 
+// More formally, if there are k elements after removing the duplicates, 
+// then the first k elements of nums should hold the final result. 
+// It does not matter what you leave beyond the first k elements.
+
+// Return k after placing the final result in the first k slots of nums.
+
+// Do not allocate extra space for another array. 
+// You must do this by modifying the input array in-place with O(1) extra memory.
+
+// Custom Judge:
+
+// The judge will test your solution with the following code:
+
+// int[] nums = [...]; // Input array
+// int[] expectedNums = [...]; // The expected answer with correct length
+
+// int k = removeDuplicates(nums); // Calls your implementation
+
+// assert k == expectedNums.length;
+// for (int i = 0; i < k; i++) {
+//     assert nums[i] == expectedNums[i];
+// }
+
+// If all assertions pass, then your solution will be accepted.
+
+class Solution {
+
+    private int $countNums;
+
+    private function shift(int $start = 0, int $length = 0, int $offset = 1, array &$arr): void {
+        for($i = 0; $i < $length; $i++) {
+            $arr[$i + $start] = $arr[$i + $start + $offset];
+        }
+    }
+
+    /**
+     * @param Integer[] $nums
+     * @return Integer
+     */
+    function removeDuplicates(&$nums) {
+        $this->countNums = count($nums);
+
+        $positionFirst = 0;
+
+        while($positionFirst < $this->countNums) {
+
+            $currValue = $nums[$positionFirst];
+            $positionLast = $positionFirst + 1;
+
+            while($positionLast < $this->countNums && $nums[$positionLast] == $currValue) {
+                $positionLast++;
+            }
+
+            $count = $positionLast - $positionFirst;
+
+            if($count > 2) {
+                $this->shift(start: $positionFirst + 2, length: $this->countNums - $positionLast, offset: $count - 2, arr: $nums);
+                $positionFirst = $positionFirst + 2;
+                $this->countNums = $this->countNums - $count + 2;
+            } else {
+                $positionFirst = $positionLast;
+            }
+        }
+
+        // $this->shift(start: 4, length: 3, offset: 2, arr: $nums);
+        return $this->countNums;
+    }
+}
+
+// $nums = [1,1,1,2,2,3];
+$nums = [0,0,1,1,1,1,2,3,3];
+
+$solution = new Solution();
+
+print_r($solution->removeDuplicates( $nums ), false);
